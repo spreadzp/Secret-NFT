@@ -29,11 +29,11 @@ Step 2 - Minting NFT
  2.4 NFT owner can view encrypted data content in IPFS
  using ContentPrivateKey. Hash which it will decrypt using the Metamask service - encrypt using OwnerPrivateKey
 
- Step 3 Withdraw NFT for sale
+ Step 3 Push NFT for sale
  3.1 OwnerAccount make approve for MarketPlace smart-contract
  3.2 OwnerAccount exposes NFTs for trading using MoveNFTForSell
 
- Step4 Buyers place bids
+ Step 4 Buyers take bids
  Now buyers can place their bids and at the same time can write their goals / slogans why they want to buy this NFT
  4.1 The Buyer, using the Metamask service, provides a public key BuyerPublicKey
  4.2 Now the buyer enters his rate, which will be debited from his account to the address of the MarketPlace smart contract and a description of his purchase purpose or any wish for the seller.

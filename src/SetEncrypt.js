@@ -17,7 +17,6 @@ const SetEncrypt = props => {
     };
 
     const setValue = async value => {
-        console.log('value.address-to-encrypt :>> ', value.addressToEncrypt, value.dataToEncrypt);
         setCustomerAddress(value.addressToEncrypt)
         const encData = await encryptData(value.addressToEncrypt, value.dataToEncrypt || clearData || 'HELLO')
         if (encData !== '') {

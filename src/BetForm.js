@@ -13,41 +13,18 @@ const BetForm = props => {
 
     const {register, handleSubmit, watch, errors, setFocus } = useForm();
     const onSubmit = async (data) => {
-    console.log("🚀 ~ file: BetForm.js ~ line 19 ~ onSubmit ~ data", data)
         // const stringUri = setUri(data);
         const bnValue  = BigNumber.from(utils.parseUnits(data.valueBet, 18))
-        console.log("🚀 ~ file: BetForm.js ~ line 24 ~ onSubmit ~ bnValue", bnValue)
         // console.log("🚀 ~ file: MintNFT.js ~ line 19 ~ onSubmit ~ stringUri", stringUri)
         const resMint = await contract.methods.makeBet(idToken, pk, drizzleState.accounts[0], data.goalPurchase).send({ from: drizzleState.accounts[0], 
             value: bnValue, gasPrice: 10 * 10 ** 10,
             gasLimit: 400000})
         if (resMint) {
-            console.log("🚀 ~ file: MintNFT.js ~ line 21 ~ onSubmit ~ resMint", resMint)
             setHashMint(resMint.transactionHash)
         }
     };
 
-    const setUri = data => {
-        // const uri = { ...data, image: ipfsLink }
-        // return JSON.stringify(uri)
-    };
-
-    useEffect(() => {
-        // setFocus("firstName");
-      }, [setFocus]);
-    useEffect(() => {
-        // const getName = async () => {
-        //     const name = await contract.methods.name.call()
-        //     if(name) {
-        //         setEncryptedData(name)
-        //     }
-        // }
-        // getName()
-
-    }, [contract])
-
-
-
+  
     const getTxStatus = () => {
         // get the transaction states from the drizzle state
         const { transactions, transactionStack } = drizzleState;

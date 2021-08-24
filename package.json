@@ -8,6 +8,7 @@
     "eth-crypto": "^2.0.0",
     "eth-sig-util": "^3.0.1",
     "ethers": "^5.4.4",
+    "image-to-base64": "^2.2.0",
     "ipfs": "^0.55.4",
     "ipfs-http-client": "^50.1.2",
     "react": "^16.8.6",

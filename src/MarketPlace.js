@@ -3,7 +3,7 @@ import { Table } from 'react-bootstrap';
 import * as _ from "lodash"; 
 import BuyersBoard from "./BuyersBoard";
 import BetForm from "./BetForm";
-import { getPublicKeyViaMetamask } from "./metamask";
+import { getPublicKeyViaMetamask } from "./metamask"; 
 
 const MarketPlace = props => {
   const [dataKey, setDataKey] = useState(null);
@@ -23,7 +23,6 @@ const MarketPlace = props => {
   const makeBet = async (owner) => {
     setChosenTokenId(owner.idNft)
     const pk = await getPublicKeyViaMetamask(drizzleState.accounts[0])
-    console.log("🚀 ~ file: BuyersBoard.js ~ line 29 ~ makeBet ~ pk", pk)
     if (pk) {
       setPubKey(pk)
       setShowBetForm(true)
@@ -36,8 +35,6 @@ const MarketPlace = props => {
       gasLimit: 150000
     })
     console.log("🚀 ~ file: MarketPlace.js ~ line 30 ~ transferNFT ~ result", result)
-
-
   }
 
   const approveNFT = async (owner) => {
@@ -62,31 +59,18 @@ const MarketPlace = props => {
         const ownerAddress = await contract.methods.ownerOf(owner.idNft).call({ from: drizzleState.accounts[0] });
         if (ownerAddress) {
           owner.owner = ownerAddress
-          console.log("🚀 ~ file: MarketPlace.js ~ line 34 ~ getCoupons ~ ownerAddress", ownerAddress)
           const approvedAddress = await contract.methods.getApproved(owner.idNft).call({ from: drizzleState.accounts[0] });
-          console.log("🚀 ~ file: MarketPlace.js ~ line 59 ~ getCoupons ~ approvedAddress", approvedAddress)
+          
           if(approvedAddress) {
-            console.log('contractMarket.address :>> ', contractMarket.address);
             owner.approved = approvedAddress === contractMarket.address
           }
-          
-
           setNftOwnersDetails(nftOwnersDetails => [...nftOwnersDetails, owner])
-          console.log('# ###nftOwnersDetails :>> ', nftOwnersDetails);
         }
       })
     }
 
   };
 
-  useEffect(() => {
-    console.log('totalAmountNft  :>> ', totalAmountNft);
-    console.log('nftOwnersDetails.length :>> ', nftOwnersDetails.length);
-    console.log('nftOwnersDetails.length === totalAmountNft :>> ', nftOwnersDetails.length === totalAmountNft);
-    if (nftOwnersDetails.length == totalAmountNft) {
-      console.log(' @@@@totalAmountNft  :>> ', totalAmountNft);
-    }
-  }, [nftOwnersDetails.length])
   const getTxStatus = () => {
     const { transactions, transactionStack } = drizzleState;
     // const txHash = transactionStack[stackId];
@@ -110,8 +94,8 @@ const MarketPlace = props => {
           </tr>
         </thead>
         <tbody>
-          {nftOwnersDetails.length == totalAmountNft ? nftOwnersDetails.map(owner =>
-            <tr>
+          {nftOwnersDetails.length == totalAmountNft ? nftOwnersDetails.map((owner, ind) =>
+            <tr key={ind}>
               <td>{owner.idNft}</td>
               <td className={drizzleState.accounts[0] === owner.owner? 'owner-address' : null}> {owner.owner}</td>
               <td>{drizzleState.accounts[0] === owner.owner ?

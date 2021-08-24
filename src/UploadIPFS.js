@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form"; 
+import { useForm } from "react-hook-form";
 import { encrypt, encryptData, getAccount, getNewAccount } from "./cypher";
 import SetDecrypt from "./SetDecrypt";
 import { create } from 'ipfs-http-client'
 import { metamaskEncrypt, metamaskEncryptData } from "./metamask";
-import MintNFT from "./MintNFT"; 
-const client = create('https://ipfs.infura.io:5001/api/v0')
+import MintNFT from "./MintNFT";
+import imageToBase64 from 'image-to-base64/browser';
 
+import { Dropdown, FloatingLabel, Form, FormControl, InputGroup, SplitButton, Button } from "react-bootstrap";
+const client = create('https://ipfs.infura.io:5001/api/v0')
+const options = [
+    { value: 0, label: 'text' },
+    { value: 1, label: 'image' },
+    { value: 2, label: 'video' },
+    { value: 3, label: 'audio' }
+]
 
 const UploadIPFS = props => {
     const [fileUrl, updateFileUrl] = useState(``)
@@ -22,6 +30,10 @@ const UploadIPFS = props => {
     const [newPublicKey, setNewPublicKey] = useState('')
     const [newAddress, setNewAddress] = useState('')
     const [creatorAddress, setCreatorAddress] = useState('')
+    const [typeDataToEncrypt, setTypeDataToEncrypt] = useState(0)
+    const [selectedOption, setSelectedOption] = useState(options[0].value);
+
+    const [textArea, setTextArea] = useState('')
 
     const { register, handleSubmit, watch, errors } = useForm();
     async function onChange(e) {
@@ -35,20 +47,14 @@ const UploadIPFS = props => {
         }
     }
 
-
     const onSubmit = data => {
+        console.log("🚀 ~ file: UploadIPFS.js ~ line 48 ~ data", data)
         setValue(data);
     };
 
-    // const onSubmitMint = async (data) => {
-    //     console.log('data :>> ', data);
-        
-
-    // }
-
     const encryptPrivateKeyForNFTFile = async () => {
-        
-        const encData = await encryptData(creatorAddress, newPrivateKey )
+
+        const encData = await encryptData(creatorAddress, newPrivateKey)
         if (encData !== '') {
             setEncryptedPrivateKey(encData)
         }
@@ -56,16 +62,10 @@ const UploadIPFS = props => {
     };
 
     const setValue = async value => {
-        console.log('value.address-to-encrypt :>> ', value.addressToEncrypt, value.dataToEncrypt);
-        setCustomerAddress(value.addressToEncrypt)
-        // const encData = await encryptData(value.addressToEncrypt, value.dataToEncrypt || clearData || 'HELLO')
-        // if (encData !== '') {
-        //     setEncryptedData(encData)
-        // }
-        console.log('newPublicKey :>> ', newPublicKey);
         console.log('clearData :>> ', clearData);
+        setCustomerAddress(value.addressToEncrypt)
 
-        const encData = await metamaskEncryptData(value.dataToEncrypt || clearData, newPublicKey)
+        const encData = await metamaskEncryptData(value.dataToEncrypt || clearData || textArea, newPublicKey)
         if (encData !== '') {
             setEncryptedData(encData)
         }
@@ -84,11 +84,11 @@ const UploadIPFS = props => {
 
     useEffect(async () => {
         const address = await getAccount()
-        if(address) {
+        if (address) {
             setCreatorAddress(address)
         }
-        
-    }, [getAccount, setCreatorAddress ])
+
+    }, [getAccount, setCreatorAddress])
 
     useEffect(() => {
         if (encryptedData && creatorAddress) {
@@ -108,16 +108,28 @@ const UploadIPFS = props => {
 
 
     const onFileChange = (event) => {
+        console.log('event.target :>> ', event.target.files);
         let file = event.target.files[0];
-
-        let fileReader = new FileReader();
-        fileReader.readAsText(file);
-
-        fileReader.onload = (event) => {
-            let fileAsText = event.target.result;
-            setClearData(fileAsText);
-        };
+        console.log('selectedOption :>> ', selectedOption); 
+            let fileReader = new FileReader();
+            fileReader.readAsText(file);
+            fileReader.onload = (event) => {
+                let fileAsText = event.target.result;
+                console.log("🚀 ~ file: UploadIPFS.js ~ line 120 ~ onFileChange ~ fileAsText", fileAsText)
+                setClearData(fileAsText);
+            };
+            fileReader.onerror = (error) => console.error('Error: ', error); 
+        
     };
+
+    const getPath = () => {
+        var inputName = document.getElementById('file1');
+        var imgPath;
+
+        imgPath = inputName.value;
+        alert(imgPath);
+        return imgPath;
+    }
 
     const getInfoFromIPFS = async () => {
         if (fileUrl) {
@@ -148,62 +160,93 @@ const UploadIPFS = props => {
         return `Transaction status: ${transactions[txHash] &&
             transactions[txHash].status}`;
     };
+
+    const handleChange = (value, selectOptionSetter) => {
+        selectOptionSetter(value)
+        // handle other stuff like persisting to store etc
+    }
+    const handleTextAreaChange = (event) => {
+        if (event && event.target.value) {
+            setTextArea(event.target.value)
+            setClearData(event.target.event);
+        }
+    }
+
     return (
         <div className="App">
             <h1>IPFS Example</h1>
             <section>
                 <h2>Encryption private key via owner public key</h2>
 
-                <button onClick={()=>generateKeys()}>Generate keys for encryption a file</button>
+                <button onClick={() => generateKeys()}>Generate keys for encryption a file</button>
                 <div>Private, public, address</div>
                 <div>pk: {newPrivateKey}</div>
                 <div>pubkey: {newPublicKey}</div>
                 <div>add: {newAddress}</div>
                 <div>Creator address{creatorAddress}</div>
 
-                <button onClick={()=>encryptPrivateKeyForNFTFile()}>Encrypt private key via new owner public key</button>
+                <button onClick={() => encryptPrivateKeyForNFTFile()}>Encrypt private key via new owner public key</button>
                 <div>Encrypted private key</div>
                 <div>{encryptedPrivateKey}</div>
                 <br></br>
-<h2>Encrypt a file via generated public key for NFT URI </h2>
+                <h2>Encrypt a file via generated public key for NFT URI </h2>
 
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="row">
-                        <div className="u-full-width">
-                            <label htmlFor="mURI">Data for encryption</label>
-                            <input
-                                name="dataToEncrypt"
-                                className="u-full-width"
-                                placeholder="string data"
-                                ref={register({ required: false, maxLength: 8000 })}
-                            />
-                            {errors.dataToEncrypt && <span>Use a valid input</span>}
+                    <Form.Group className="mb-3" controlId="exampleForm.ControlSelect">
+                        <Form.Select aria-label="Floating label select example" value={selectedOption}
+                            onChange={e => handleChange(e.target.value, setSelectedOption)}>
+                            {options.map(o => (
+                                <option key={o.value} value={o.value}>{o.label}</option>
+                            ))}
+                        </Form.Select>
+                    </Form.Group>
+                    {selectedOption === '1' ? <><Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                        <label>Paste base64 string of the image</label>
+                        <textarea rows={8} value={textArea} onChange={handleTextAreaChange} />
+                    </Form.Group>
+                        {
+                            selectedOption === '1' && <input type="button" onClick={() => window.open("https://www.base64-image.de/", "_blank")} value="toBase64" />
+                        }
+                    </> :
+                        <><div className="row">
+                            <div className="u-full-width">
+                                <label htmlFor="mURI">Data for encryption</label>
+                                <input
+                                    name="dataToEncrypt"
+                                    className="u-full-width"
+                                    placeholder="string data"
+                                    ref={register({ required: false, maxLength: 80000 })}
+                                />
+                                {errors.dataToEncrypt && <span>Use a valid input</span>}
+                            </div>
                         </div>
-                    </div>
-                    <div className="row">
-                        <div className="u-full-width">
-                            <label htmlFor="mURI">Upload</label>
-                            <input
-                                type="file"
-                                name="fileToEncrypt"
-                                className="u-full-width"
-                                onChange={onFileChange}
-                            />
-                            {errors.fileToEncrypt && <span>Use a valid input</span>}
-                        </div>
-                    </div>
+                            <div className="row">
+                                <div className="u-full-width">
+                                    <label htmlFor="mURI">Upload</label>
+                                    <input
+                                        type="file"
+                                        id="file1"
+                                        name="fileToEncrypt"
+                                        className="u-full-width"
+                                        onChange={onFileChange}
+                                    />
+                                    {errors.fileToEncrypt && <span>Use a valid input</span>}
+                                </div>
+                            </div>
+                        </>
+                    }
                     <input className="button-primary" type="submit" value="Submit" />
                 </form>
-               {/*  <div>{getTxStatus()}</div> */}
+                {/*  <div>{getTxStatus()}</div> */}
                 {/* <UriBlock /> */}
-                <div>{encryptedData}</div>
+                {/* <div>{encryptedData}</div> */}
 
-               
                 <SetDecrypt
                     drizzle={drizzle}
                     drizzleState={drizzleState}
                     encData={encryptedData}
                     encPrivateKey={encryptedPrivateKey}
+                    typeData={selectedOption}
                 />
             </section>
             <input
@@ -213,13 +256,13 @@ const UploadIPFS = props => {
             <a href={fileUrl}>{fileUrl}</a>
             <button onClick={() => getInfoFromIPFS()}>Get Info from IPFS</button>
             <div>{textFromIpfsFIle}</div>
-            <MintNFT 
-            drizzle={drizzle}
-            drizzleState={drizzleState}
-            ipfsLink={fileUrl}
-            encryptedKey={encryptedPrivateKey}
+            <MintNFT
+                drizzle={drizzle}
+                drizzleState={drizzleState}
+                ipfsLink={fileUrl}
+                encryptedKey={encryptedPrivateKey}
+                typeData={selectedOption}
             />
-            
         </div>
     );
 };

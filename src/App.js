@@ -4,6 +4,7 @@ import UploadIPFS from "./UploadIPFS";
 import DownloadIPFS from "./DownloadIPFS";
 import MarketPlace from "./MarketPlace";
 import OwnerAssets from "./OwnerAssets";
+import Contacts from "./Contacts";
 
 const App = props => {
   const [drizzleReadinessState, setDrizzleReadinessState] = useState({
@@ -70,6 +71,9 @@ const App = props => {
             <li>
               <Link to="/upload-ipfs">Upload a file to IPFS</Link>
             </li> 
+            <li>
+              <Link to="/contacts">Contacts</Link>
+            </li> 
           </ul>
         </nav>
 
@@ -96,6 +100,12 @@ const App = props => {
           </Route>
           <Route path="/download-ipfs">
             <DownloadIPFS
+              drizzle={drizzle}
+              drizzleState={drizzleReadinessState.drizzleState}
+            />
+          </Route>
+          <Route path="/contacts">
+            <Contacts
               drizzle={drizzle}
               drizzleState={drizzleReadinessState.drizzleState}
             />

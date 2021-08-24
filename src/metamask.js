@@ -66,7 +66,7 @@ var handle = (promise) => {
 }
 
 export async function decryptPrivateKey(encryptedMessage, account) {
-    console.log(`encryptedMessage: ${encryptedMessage}`)
+    //console.log(`encryptedMessage: ${encryptedMessage}`)
     const [decryptedMessage, decryptErr] = await handle(window.ethereum.request({
         method: 'eth_decrypt',
         params: [encryptedMessage, account],

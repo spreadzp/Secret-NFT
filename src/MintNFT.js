@@ -7,7 +7,7 @@ const MintNFT = props => {
     const [hashMint, setHashMint] = useState('');
     const [pubKey, setPubKey] = useState('');
     const [countTokens, setCountTokens] = useState(0);
-    const { drizzle, drizzleState, ipfsLink, encryptedKey } = props;
+    const { drizzle, drizzleState, ipfsLink, encryptedKey, typeData } = props;
     const contract = drizzle.contracts.EncNft;
 
 
@@ -32,6 +32,7 @@ const MintNFT = props => {
     const onSubmit = async (data) => {
 
         const stringUri = setUri(data);
+       
         console.log("🚀 ~ file: MintNFT.js ~ line 19 ~ onSubmit ~ stringUri", stringUri)
         const resMint = await contract.methods.mint(drizzleState.accounts[0], countTokens + 1, stringUri, encryptedKey).send({ from: drizzleState.accounts[0] })
         if (resMint) {
@@ -52,6 +53,15 @@ const MintNFT = props => {
         }
     }
         const setUri = data => {
+        
+            console.log('typeData :>> ', typeData);
+            if(typeData == 0) {
+                data.description += ' #text'
+            }
+            if(typeData == 1) {
+                data.description += ' #image'
+            }
+            console.log("🚀 ~ file: MintNFT.js ~ line 56 ~ data", data)
             const uri = { ...data, image: ipfsLink }
             return JSON.stringify(uri)
         }; 
