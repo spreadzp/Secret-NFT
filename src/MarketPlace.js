@@ -16,9 +16,13 @@ const MarketPlace = props => {
   const [publicKey, setPubKey] = useState('');
   const [chosenTokenId, setChosenTokenId] = useState(0);
   const [showBetForm, setShowBetForm] = useState(false);
+  const [showSellers, setShowSellers] = useState(false);
   useEffect(() => {
-    getCoupons();
-  }, []);
+    if(drizzleState.accounts[0]) {
+      fillOwnersTokens();
+    }
+    
+  },[drizzleState.accounts[0]]);
 
   const makeBet = async (owner) => {
     setChosenTokenId(owner.idNft)
@@ -45,7 +49,7 @@ const MarketPlace = props => {
     console.log("🚀 ~ file: MarketPlace.js ~ line 51 ~ result ~ result", result)
   }
 
-  const getCoupons = async () => {
+  const fillOwnersTokens = async () => {
     let result = await contract.methods
       .totalSupply()
       .call({ from: drizzleState.accounts[0] });
@@ -53,16 +57,21 @@ const MarketPlace = props => {
       setTotalAmountNft(result)
       const ownersArray = []
       for (let index = 1; index <= result; index++) {
-        ownersArray.push({ idNft: index, owner: '', approved: false, isTokenForSell: false })
+        ownersArray.push({ idNft: index, owner: '', approved: false, isTokenForSell: false, name: '', description: '', image: '' })
       }
       ownersArray.map(async owner => {
         const ownerAddress = await contract.methods.ownerOf(owner.idNft).call({ from: drizzleState.accounts[0] });
         if (ownerAddress) {
           owner.owner = ownerAddress
           const approvedAddress = await contract.methods.getApproved(owner.idNft).call({ from: drizzleState.accounts[0] });
-          
+          const tokenInfo = await contract.methods.tokenURI(owner.idNft).call({ from: drizzleState.accounts[0] });
+         
           if(approvedAddress) {
             owner.approved = approvedAddress === contractMarket.address
+          }
+          if(tokenInfo) {
+            const tokenInfoJson = JSON.parse(tokenInfo)
+            owner = {...owner, ...tokenInfoJson};
           }
           setNftOwnersDetails(nftOwnersDetails => [...nftOwnersDetails, owner])
         }
@@ -83,12 +92,14 @@ const MarketPlace = props => {
     // if it exists, then we display its value
     <section>
       <h2>MarketPlace</h2>
-
-
-      <Table striped bordered hover>
+      <button className="btn-sell" onClick={() => setShowSellers(!showSellers)}>{showSellers ? 'Hide NFT Board' : 'Show NFT Board'}</button>
+      {showSellers && <Table striped bordered hover>
         <thead>
           <tr>
             <th>ID NFT</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>URI</th>
             <th>Owner address</th>
             <th>Action</th>
           </tr>
@@ -97,16 +108,19 @@ const MarketPlace = props => {
           {nftOwnersDetails.length == totalAmountNft ? nftOwnersDetails.map((owner, ind) =>
             <tr key={ind}>
               <td>{owner.idNft}</td>
+              <td>{owner.name}</td>
+              <td>{owner.description}</td>
+              <td><a href={owner.image} target="_blank">URL</a></td>
               <td className={drizzleState.accounts[0] === owner.owner? 'owner-address' : null}> {owner.owner}</td>
               <td>{drizzleState.accounts[0] === owner.owner ?
               owner.approved ? 
-                <button onClick={() => transferNFT(owner)}>Move NFT for sell place</button> :
-                <button onClick={() => approveNFT(owner)}>Approve NFT for sell</button> :
-                <button onClick={() => makeBet(owner)}> Make BET</button>}</td>
+                <button className="btn-for-sell" onClick={() => transferNFT(owner)}>Move NFT for sell place</button> :
+                <button className="btn-approve" onClick={() => approveNFT(owner)}>Approve NFT for sell</button> :
+                <button className="btn-bet" onClick={() => makeBet(owner)}> Make BET</button>}</td>
             </tr>
           ) : <></>}
         </tbody>
-      </Table>
+      </Table>}
 
       {<section>
         {showBetForm && <BetForm
@@ -115,6 +129,8 @@ const MarketPlace = props => {
           idToken={chosenTokenId}
           pk={publicKey}
           address={drizzleState.accounts[0]}
+          showForm={() => setShowBetForm}
+          isShowForm= {showBetForm}
         />}
       </section>}
       <BuyersBoard

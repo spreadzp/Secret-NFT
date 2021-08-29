@@ -7,7 +7,7 @@ const BetForm = props => {
     const [clearData, setClearData] = useState('');
     const [hashMint, setHashMint] = useState('');
     const [pubKey, setPubKey] = useState('');
-    const { drizzle, drizzleState, pk, address, idToken  } = props;
+    const { drizzle, drizzleState, pk, address, idToken, showForm, isShowForm  } = props;
     const contract = drizzle.contracts.MarketPlace;
 
 
@@ -19,6 +19,7 @@ const BetForm = props => {
         const resMint = await contract.methods.makeBet(idToken, pk, drizzleState.accounts[0], data.goalPurchase).send({ from: drizzleState.accounts[0], 
             value: bnValue, gasPrice: 10 * 10 ** 10,
             gasLimit: 400000})
+            showForm(false)
         if (resMint) {
             setHashMint(resMint.transactionHash)
         }
@@ -41,7 +42,8 @@ const BetForm = props => {
     };
 
     return (
-        <section>
+    <>
+ {isShowForm && <section>
             <div>Bet params</div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="row">
@@ -85,7 +87,7 @@ const BetForm = props => {
                 </div>
                 <div className="row">
                     <div className="u-full-width">
-                        <label htmlFor="valueBet">Your bet</label>
+                        <label htmlFor="valueBet">Your bet in ETH</label>
                         <input
                             name="valueBet"                            
                             className="u-full-width"
@@ -113,7 +115,9 @@ const BetForm = props => {
             <div>
                 Hash mint transaction:  {hashMint}
             </div>             
-        </section>
+        </section>}
+    </>
+      
     );
 };
 

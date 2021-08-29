@@ -20,8 +20,8 @@ const OwnerAssets = props => {
     const contract = drizzle.contracts.EncNft;
 
     const contractMarket = drizzle.contracts.MarketPlace;
-    const typeFileNames = ['#text', '#image', '#qr']
-
+    const typeFileNames = ['#text', '#image', '#file']
+    const cutParams = [{start: 5, end: -3}, {start: 6, end: -4}, {start: 5, end: -3}]
     
 
     useEffect(() => {
@@ -56,14 +56,18 @@ const OwnerAssets = props => {
 
     useEffect(() =>{
         if(choosedToken) {
+            getTypeDataFromDescription(choosedToken.description)
+
             const path = choosedToken.image.split('/')
             const cidPath = path[path.length - 1]
             console.log("🚀 ~ file: OwnerAssets.js ~ line 60 ~ useEffect ~ cidPath", cidPath)
             const getInfoFromIPFS = async (cid) => {
                 const result = await client.object.get(cid, { timeout: 30000 })
-                const string = new TextDecoder().decode(result.Data).slice(0, -4);
-                const cuttedString = string.slice(6)
-                console.log("🚀 ~ file: OwnerAssets.js ~ line 66 ~ getInfoFromIPFS ~ cuttedString", cuttedString)
+                console.log('typeData :>> ', typeData);
+                console.log('cutParams[typeData].start, cutParams[typeData].end :>> ', cutParams[typeData].start, cutParams[typeData].end);
+                const cuttedString = new TextDecoder().decode(result.Data).slice(cutParams[typeData].start, cutParams[typeData].end);
+                //const cuttedString = string.slice(5)
+                //console.log("🚀 ~ file: OwnerAssets.js ~ line 66 ~ getInfoFromIPFS ~ cuttedString", cuttedString)
                 setEncData(cuttedString)
 
             }
@@ -100,6 +104,7 @@ const OwnerAssets = props => {
         console.log("🚀 ~ file: OwnerAssets.js ~ line 85 ~ decryptInfo ~ token", token)
         if (!choosedToken || choosedToken !== token || showDecryptModule) {
             setChoosedToken(token)
+            getTypeDataFromDescription(token.description)
             setShowDecryptModule(true)
         }
     }
@@ -110,8 +115,6 @@ const OwnerAssets = props => {
             getTypeDataFromDescription(choosedToken.description)
 
             setShowDecryptModule(true)
-            console.log('typeData :>> ', typeData);
-            console.log('encryptedPrivateKey  :>> ', encryptedPrivateKey);
         } 
 
 
@@ -140,7 +143,6 @@ const OwnerAssets = props => {
     return (
         <section>
             <h2>Your assets</h2>
-            <h3>Sold tokens </h3>
 
             <Table striped bordered hover>
                 <thead>
@@ -148,7 +150,7 @@ const OwnerAssets = props => {
                         <th>ID NFT</th>
                         <th>Name</th>
                         <th>Description</th>
-                        <th>Sum</th>
+                        <th>Sum for withdraw</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -161,10 +163,10 @@ const OwnerAssets = props => {
                             <td>{token.description}</td>
                             <td>{token.balance}</td>
                             <td>{token.balance > 0 ?
-                                <button onClick={() => withdrawSum(token.idToken)}>Withdraw</button> :
+                                <button className="btn-withdraw" onClick={() => withdrawSum(token.idToken)}>Withdraw</button> :
                                 compareAddresses(token.currentOwner, drizzleState.accounts[0]) ?
-                                    <button onClick={function () { return decryptInfo(token) }}>Decrypt the file to see it </button> :
-                                    'You sold the token'
+                                    <button className="btn-decrypt" onClick={function () { return decryptInfo(token) }}>Decrypt data of the NFT </button> :
+                                    'You sold the token and withdraw all sum'
                             }</td>
                         </tr>))
 

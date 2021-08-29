@@ -59,10 +59,14 @@ const SetDecrypt = props => {
         return (
             <>
                 {type == '0' && <div name="decrypredData"
-                    className="u-full-width">{decryptedInfo}</div>}
+                    className="u-full-width"><textarea rows={20} cols={80} value={decryptedInfo}   /></div>}
                 {type == '1' && <div><img name="decrypredData"
                     className="u-full-width" src={decryptedInfo} />
                 </div>}
+                {
+                    type == '2' && <div name="decrypredData"
+                    className="u-full-width"><textarea rows={40} cols={80} value={decryptedInfo}   /></div>
+                }
             </>
         )
     }
@@ -76,8 +80,8 @@ const SetDecrypt = props => {
 
                 </div>
             </div>
-            <button onClick={() => setDecPk(!decPk)} >Decrypt Data</button>
-            <button onClick={() => showDialod(false)} >close</button>
+            <button className="btn-upload" onClick={() => setDecPk(!decPk)} >Decrypt Data</button>
+            {/* <button className="btn-upload" onClick={() => showDialod(false)} >close</button> */}
         </section>
     );
 };

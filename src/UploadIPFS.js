@@ -12,8 +12,7 @@ const client = create('https://ipfs.infura.io:5001/api/v0')
 const options = [
     { value: 0, label: 'text' },
     { value: 1, label: 'image' },
-    { value: 2, label: 'video' },
-    { value: 3, label: 'audio' }
+    { value: 2, label: 'file' }
 ]
 
 const UploadIPFS = props => {
@@ -31,7 +30,8 @@ const UploadIPFS = props => {
     const [newAddress, setNewAddress] = useState('')
     const [creatorAddress, setCreatorAddress] = useState('')
     const [typeDataToEncrypt, setTypeDataToEncrypt] = useState(0)
-    const [selectedOption, setSelectedOption] = useState(options[0].value);
+    const [selectedOption, setSelectedOption] = useState(0);
+    const [choisedFile, setChoisedFile] = useState('')
 
     const [textArea, setTextArea] = useState('')
 
@@ -110,16 +110,18 @@ const UploadIPFS = props => {
     const onFileChange = (event) => {
         console.log('event.target :>> ', event.target.files);
         let file = event.target.files[0];
-        console.log('selectedOption :>> ', selectedOption); 
-            let fileReader = new FileReader();
-            fileReader.readAsText(file);
-            fileReader.onload = (event) => {
-                let fileAsText = event.target.result;
-                console.log("🚀 ~ file: UploadIPFS.js ~ line 120 ~ onFileChange ~ fileAsText", fileAsText)
-                setClearData(fileAsText);
-            };
-            fileReader.onerror = (error) => console.error('Error: ', error); 
-        
+        console.log("🚀 ~ file: UploadIPFS.js ~ line 112 ~ onFileChange ~ file", file)
+        //setChoisedFile(file.name)
+        console.log('selectedOption :>> ', selectedOption);
+        let fileReader = new FileReader();
+        fileReader.readAsText(file);
+        fileReader.onload = (event) => {
+            let fileAsText = event.target.result;
+            console.log("🚀 ~ file: UploadIPFS.js ~ line 120 ~ onFileChange ~ fileAsText", fileAsText)
+            setClearData(fileAsText);
+        };
+        fileReader.onerror = (error) => console.error('Error: ', error);
+
     };
 
     const getPath = () => {
@@ -174,95 +176,112 @@ const UploadIPFS = props => {
 
     return (
         <div className="App">
-            <h1>IPFS Example</h1>
+            <h1>Mint encoded NFT</h1>
             <section>
-                <h2>Encryption private key via owner public key</h2>
+                <h2>Step 1: create private key for the NFT</h2>
 
-                <button onClick={() => generateKeys()}>Generate keys for encryption a file</button>
-                <div>Private, public, address</div>
+                <button className="btn-upload" onClick={() => generateKeys()}>Generate keys for encryption a data</button>
                 <div>pk: {newPrivateKey}</div>
                 <div>pubkey: {newPublicKey}</div>
                 <div>add: {newAddress}</div>
                 <div>Creator address{creatorAddress}</div>
-
-                <button onClick={() => encryptPrivateKeyForNFTFile()}>Encrypt private key via new owner public key</button>
-                <div>Encrypted private key</div>
-                <div>{encryptedPrivateKey}</div>
+                {newPrivateKey && <h2>Step 2: Encrypt private key via the creator public key</h2>}
+                {newPrivateKey && <button className="btn-upload" onClick={() => encryptPrivateKeyForNFTFile()}>Encrypt private key</button>}
+                {/* <div>Encrypted private key</div>
+                <div>{encryptedPrivateKey}</div> */}
                 <br></br>
-                <h2>Encrypt a file via generated public key for NFT URI </h2>
 
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlSelect">
-                        <Form.Select aria-label="Floating label select example" value={selectedOption}
-                            onChange={e => handleChange(e.target.value, setSelectedOption)}>
-                            {options.map(o => (
-                                <option key={o.value} value={o.value}>{o.label}</option>
-                            ))}
-                        </Form.Select>
-                    </Form.Group>
-                    {selectedOption === '1' ? <><Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                        <label>Paste base64 string of the image</label>
-                        <textarea rows={8} value={textArea} onChange={handleTextAreaChange} />
-                    </Form.Group>
-                        {
-                            selectedOption === '1' && <input type="button" onClick={() => window.open("https://www.base64-image.de/", "_blank")} value="toBase64" />
-                        }
-                    </> :
-                        <><div className="row">
-                            <div className="u-full-width">
-                                <label htmlFor="mURI">Data for encryption</label>
-                                <input
-                                    name="dataToEncrypt"
-                                    className="u-full-width"
-                                    placeholder="string data"
-                                    ref={register({ required: false, maxLength: 80000 })}
-                                />
-                                {errors.dataToEncrypt && <span>Use a valid input</span>}
-                            </div>
-                        </div>
-                            <div className="row">
+                {encryptedPrivateKey && <h2>Step 3: Encrypt data via generated public key for NFT URI and upload it to IPFS </h2>}
+                {encryptedPrivateKey &&
+
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <label>Choice type data</label>
+                        <Form.Group className="mb-3" controlId="exampleForm.ControlSelect">
+                            <Form.Select aria-label="Floating label select example" value={selectedOption}
+                                onChange={e => handleChange(e.target.value, setSelectedOption)}>
+                                {options.map(o => (
+                                    <option key={o.value} value={o.value}>{o.label}</option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+                        {selectedOption === '1' ? <><Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+                            <label>Paste base64 string of the image</label>
+
+                            <textarea rows={8} value={textArea} onChange={handleTextAreaChange} />
+                            <div>Your image must be less than 1Mb for the service below</div>
+                        </Form.Group>
+                            {
+                                selectedOption === '1' && <input type="button" className="btn-upload" onClick={() => window.open("https://www.base64-image.de/", "_blank")} value="toBase64" />
+                            }
+                        </> :
+                            <>{
+                            selectedOption === '0' && <div className="row">
                                 <div className="u-full-width">
-                                    <label htmlFor="mURI">Upload</label>
+                                    <label htmlFor="mURI">Data for encryption</label>
                                     <input
-                                        type="file"
-                                        id="file1"
-                                        name="fileToEncrypt"
+                                        name="dataToEncrypt"
                                         className="u-full-width"
-                                        onChange={onFileChange}
+                                        placeholder="string data"
+                                        ref={register({ required: false, maxLength: 80000 })}
                                     />
-                                    {errors.fileToEncrypt && <span>Use a valid input</span>}
+                                    {errors.dataToEncrypt && <span>Use a valid input</span>}
                                 </div>
                             </div>
-                        </>
-                    }
-                    <input className="button-primary" type="submit" value="Submit" />
-                </form>
+                            }
+                                {
+                                     selectedOption === '2' && <div className="row">
+                                    <div className="u-full-width">
+                                        <input type="file" id="upload" 
+                                            name="fileToEncrypt"
+                                            className="u-full-width"
+                                            onChange={onFileChange}
+                                            hidden />
+                                        <label className="label-upload" htmlFor="upload">Choose file</label>
+                                        {/* <label htmlFor="mURI">Upload</label>
+                                        <input
+                                            type="file"
+                                            id="file1"
+                                            name="fileToEncrypt"
+                                            className="u-full-width"
+                                            onChange={onFileChange}
+                                        /> */}
+                                        {errors.fileToEncrypt && <span>Use a valid input</span>}
+                                        {choisedFile}
+                                    </div>
+                                </div>}
+                            </>
+                        }
+                        {clearData !== '' && <input className="btn-upload" type="submit" value="Push encoded data to IPFS" />}
+                    </form>
+                }
                 {/*  <div>{getTxStatus()}</div> */}
                 {/* <UriBlock /> */}
                 {/* <div>{encryptedData}</div> */}
-
-                <SetDecrypt
+                {fileUrl && <h2>Step 4: Encrypt data via generated public key for NFT URI </h2>}
+                {fileUrl && <SetDecrypt
                     drizzle={drizzle}
                     drizzleState={drizzleState}
                     encData={encryptedData}
                     encPrivateKey={encryptedPrivateKey}
                     typeData={selectedOption}
-                />
+                />}
             </section>
-            <input
+            {/* <input
                 type="file"
                 onChange={onChange}
-            />
+            /> */}
             <a href={fileUrl}>{fileUrl}</a>
-            <button onClick={() => getInfoFromIPFS()}>Get Info from IPFS</button>
-            <div>{textFromIpfsFIle}</div>
-            <MintNFT
+            {/* <button onClick={() => getInfoFromIPFS()}>Get Info from IPFS</button> */}
+            {/* <div>{textFromIpfsFIle}</div> */}
+            {fileUrl && <h2>Step 5: Encrypt data via generated public key for NFT URI </h2>}
+            {fileUrl && <MintNFT
                 drizzle={drizzle}
                 drizzleState={drizzleState}
                 ipfsLink={fileUrl}
                 encryptedKey={encryptedPrivateKey}
                 typeData={selectedOption}
             />
+            }
         </div>
     );
 };

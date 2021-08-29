@@ -61,6 +61,10 @@ const MintNFT = props => {
             if(typeData == 1) {
                 data.description += ' #image'
             }
+
+            if(typeData == 2) {
+                data.description += ' #file'
+            }
             console.log("🚀 ~ file: MintNFT.js ~ line 56 ~ data", data)
             const uri = { ...data, image: ipfsLink }
             return JSON.stringify(uri)
@@ -83,7 +87,7 @@ const MintNFT = props => {
 
         return (
             <section>
-                <div>Mint new NFT to owner</div>
+                <div>Mint new NFT to owner address</div>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="row">
                         <div className="u-full-width">
@@ -91,7 +95,7 @@ const MintNFT = props => {
                             <input
                                 name="name"
                                 className="u-full-width"
-                                placeholder="Test NFT"
+                                placeholder="Name of your NFT"
                                 ref={register({ required: true, maxLength: 42 })}
                             />
                             {errors.name && <span>Use a valid input</span>}
@@ -103,14 +107,14 @@ const MintNFT = props => {
                             <input
                                 name="description"
                                 className="u-full-width"
-                                placeholder="string data"
+                                placeholder="description data"
                                 ref={register({ required: false, maxLength: 8000 })}
                             />
                             {errors.description && <span>Use a valid input</span>}
                         </div>
                     </div>
 
-                    <input className="button-primary" type="submit" value="Mint" />
+                    <input className="btn-upload" type="submit" value="Mint" />
                 </form>
                 <div>
                     Hash mint transaction:  {hashMint}
@@ -118,7 +122,7 @@ const MintNFT = props => {
                 {/* <TransferNFT drizzle={drizzle}
                     drizzleState={drizzleState}
                     ipfsLink={ipfsLink} /> */}
-                <button onClick={() => approveNft()}>Approve to MarketPlace contract</button>
+                {/* <button onClick={() => approveNft()}>Approve to MarketPlace contract</button> */}
             </section>
         );
     };

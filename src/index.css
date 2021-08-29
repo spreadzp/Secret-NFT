@@ -3,6 +3,8 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: rgb(207, 172, 14);
+    color: white;
 }
 
 code {
@@ -23,7 +25,7 @@ code {
 
 .token_box {
     width: 300px;
-    border: 2px solid darkgrey;
+    border: 2px solid rgb(5, 164, 175);
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 25px;
@@ -76,3 +78,74 @@ nav ul {
 .owner-address {
     color: red;
 }
+
+.btn-upload, .btn-decrypt {
+    color: #ff7300;
+    font-weight: 500;
+    font: initial;
+    background: radial-gradient( rgb(38, 225, 238), transparent);
+    border-radius: 20px;
+}
+
+.btn-withdraw {
+    color: #041d0e;
+    font-weight: 500;
+    font: initial;
+    background: radial-gradient( rgb(219, 48, 18), transparent);
+    border-radius: 20px; 
+}
+
+.btn-for-sell {
+    color: #302c2c;
+    font-weight: 500;
+    font: initial;
+    background: radial-gradient( rgb(223, 238, 7), transparent);
+    border-radius: 20px;  
+}
+.link {
+    color: #e3f1e9;
+    font-weight: 500;
+    font: initial;
+    background: radial-gradient( rgb(219, 48, 18), transparent);
+    border-radius: 20px; 
+}
+
+.btn-sell {
+        color: #e3f1e9;
+        font-weight: 500;
+        font: initial;
+        background: radial-gradient( rgb(219, 48, 18), transparent);
+        border-radius: 20px; 
+}
+
+.accordion-button {
+    color: #f10606;
+    font-weight: 500;
+    font: initial;
+}
+.btn-approve {
+    color: #f3e8e8;
+    font-weight: 500;
+    font: initial;
+    background: radial-gradient( rgb(245, 16, 0), transparent);
+    border-radius: 20px;  
+}
+
+.btn-bet {
+    color: #f10606;
+    font-weight: 500;
+    font: initial;
+    background: radial-gradient( rgb(18, 219, 18), transparent);
+    border-radius: 20px; 
+}
+
+.label-upload{
+    display: inline-block;
+    background: radial-gradient( rgb(38, 225, 238), transparent);
+    color: #ff7300;
+    padding: 0.5rem;
+    font-family: sans-serif;
+    border-radius: 0.3rem;
+    cursor: pointer;
+    margin-top: 1rem;
+  }

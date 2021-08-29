@@ -51,10 +51,10 @@ const App = props => {
         <div className="title_logo">
           <img
             src={
-              "https://www.devoleum.com/47fa9787d0791533e573aed32e8147a9.png"
+              "assets/enc-nft-logo.png"
             }
           />
-          <h1>Secret NFT</h1>
+          <h1>Encoded NFT</h1>
         </div> 
         <br /> 
         <br />
@@ -63,16 +63,16 @@ const App = props => {
         <nav className="menu">
           <ul> 
             <li>
-              <Link to="/">Market Place</Link>
+              <Link className="link" to="/">Market Place</Link>
             </li>
             <li>
-              <Link to="/assets">Owner Assets</Link>
+              <Link className="link" to="/assets">Owner Assets</Link>
             </li> 
             <li>
-              <Link to="/upload-ipfs">Upload a file to IPFS</Link>
+              <Link className="link" to="/upload-ipfs">Upload a file to IPFS</Link>
             </li> 
             <li>
-              <Link to="/contacts">Contacts</Link>
+              <Link className="link" to="/contacts">Contacts</Link>
             </li> 
           </ul>
         </nav>

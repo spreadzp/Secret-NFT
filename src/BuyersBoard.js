@@ -13,7 +13,8 @@ const BuyersBoard = props => {
     const { drizzle, drizzleState, nftOwnersDetails } = props;
     const contract = drizzle.contracts.EncNft;
     const contractMarket = drizzle.contracts.MarketPlace;
-    const [showBetForm, setShowBetForm] = useState(false);
+   
+    const [showBoard, setShowBoard] = useState(false);
     const [buyerIndex, setBuyerIndex] = useState(-1);
     useEffect(() => {
         getBuyers();
@@ -24,8 +25,7 @@ const BuyersBoard = props => {
         setChosenTokenId(owner.idNft)
         const pk = await getPublicKeyViaMetamask(drizzleState.accounts[0])
         if (pk) {
-            setPubKey(pk)
-            setShowBetForm(true)
+            setPubKey(pk) 
         }
     }
     const getBuyers = async () => {
@@ -51,7 +51,8 @@ const BuyersBoard = props => {
                                     buyerBet: buyersMakeBet[2], goalPurchase: buyersMakeBet[3]
                                 }])
                             }
-                        }                    }
+                        }
+                    }
                 } catch (error) {
                     console.log("🚀 ~ file: BuyersBoard.js ~ line 72 ~ getBuyers ~ error", error)
                 }
@@ -85,7 +86,7 @@ const BuyersBoard = props => {
             token.owner === drizzleState.accounts[0] && token.approved ?
                 token.owner === drizzleState.accounts[0] && !token.approved ?
                     'Need to approve to sell' :
-                    <button onClick={() => sellNft(buyer, token)}>Sell NFT</button > :
+                    <button className="btn-sell" onClick={() => sellNft(buyer, token)}>Sell NFT</button > :
 
                 ''
         )
@@ -121,18 +122,18 @@ const BuyersBoard = props => {
     return (
         // if it exists, then we display its value
         <>
-            <h2 > Buyers Boards </h2>
-            <Accordion defaultActiveKey="0" > {
+            <button className="btn-bet" onClick={() => setShowBoard(!showBoard)}>{showBoard ? 'Hide Buyers Boards' : 'Show Buyers Boards'}</button>           
+            {showBoard && <Accordion defaultActiveKey="0" > {
                 nftOwnersDetails.map((token, index) =>
-                    <Accordion.Item eventKey={index} key={index} >
-                        <Accordion.Header onClick={() => setBuyerIndex(index)}> ID NFT: {token.idNft} {token.name} </Accordion.Header>
+                    <Accordion.Item   eventKey={index} key={index} >
+                        <Accordion.Header className="ah" onClick={() => setBuyerIndex(index)}> ID NFT: {token.idNft} {token.name} </Accordion.Header>
                         <Accordion.Body className={buyerIndex === index ? "active" : "inactive"} >
                             <div > {token.description} </div> {BuyersOfToken(token)}
                         </Accordion.Body> </Accordion.Item >
                 )
             }
 
-            </Accordion>
+            </Accordion>}
         </>
     );
 };
