@@ -109,16 +109,13 @@ const UploadIPFS = props => {
 
 
     const onFileChange = (event) => {
-        console.log('event.target :>> ', event.target.files);
         let file = event.target.files[0];
-        console.log("🚀 ~ file: UploadIPFS.js ~ line 112 ~ onFileChange ~ file", file)
         //setChoisedFile(file.name)
         console.log('selectedOption :>> ', selectedOption);
         let fileReader = new FileReader();
         fileReader.readAsText(file);
         fileReader.onload = (event) => {
             let fileAsText = event.target.result;
-            console.log("🚀 ~ file: UploadIPFS.js ~ line 120 ~ onFileChange ~ fileAsText", fileAsText)
             setClearData(fileAsText);
         };
         fileReader.onerror = (error) => console.error('Error: ', error);
@@ -174,7 +171,18 @@ const UploadIPFS = props => {
             setClearData(event.target.event);
         }
     }
-
+    function imageToBase64(img)
+    {
+        var canvas, ctx, dataURL, base64;
+        canvas = document.createElement("canvas");
+        ctx = canvas.getContext("2d");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        dataURL = canvas.toDataURL("image/png");
+        base64 = dataURL.replace(/^data:image\/png;base64,/, "");
+        return base64;
+    }
     return (
         <div className="App">
             <h1>Mint encoded NFT</h1>

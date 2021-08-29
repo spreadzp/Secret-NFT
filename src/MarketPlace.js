@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Table } from 'react-bootstrap'; 
-import * as _ from "lodash"; 
 import BuyersBoard from "./BuyersBoard";
 import BetForm from "./BetForm";
 import { getPublicKeyViaMetamask } from "./metamask"; 
 
 const MarketPlace = props => {
-  const [dataKey, setDataKey] = useState(null);
   const [totalAmountNft, setTotalAmountNft] = useState(0);
   const [nftOwnersDetails, setNftOwnersDetails] = useState([]);
   const { drizzle, drizzleState } = props;
@@ -34,6 +32,7 @@ const MarketPlace = props => {
   }
 
   const transferNFT = async (owner) => {
+    // need to add seller description in UI
     let result = await contractMarket.methods.moveTokenForSell(owner.idNft, `Advertise of token ${owner.idNft}`).send({
       from: drizzleState.accounts[0],
       gasLimit: 150000
