@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Secret-NFT/static/css/main.294e8144.chunk.css",
-    "main.js": "/Secret-NFT/static/js/main.497c334a.chunk.js",
-    "main.js.map": "/Secret-NFT/static/js/main.497c334a.chunk.js.map",
+    "main.css": "/Secret-NFT/static/css/main.71216762.chunk.css",
+    "main.js": "/Secret-NFT/static/js/main.3a0f0ca2.chunk.js",
+    "main.js.map": "/Secret-NFT/static/js/main.3a0f0ca2.chunk.js.map",
     "runtime~main.js": "/Secret-NFT/static/js/runtime~main.a9c8cc16.js",
     "runtime~main.js.map": "/Secret-NFT/static/js/runtime~main.a9c8cc16.js.map",
-    "static/js/2.9797668b.chunk.js": "/Secret-NFT/static/js/2.9797668b.chunk.js",
-    "static/js/2.9797668b.chunk.js.map": "/Secret-NFT/static/js/2.9797668b.chunk.js.map",
+    "static/js/2.ec531250.chunk.js": "/Secret-NFT/static/js/2.ec531250.chunk.js",
+    "static/js/2.ec531250.chunk.js.map": "/Secret-NFT/static/js/2.ec531250.chunk.js.map",
     "index.html": "/Secret-NFT/index.html",
-    "precache-manifest.6f9cf908dbd3293be1f1c277590c5aa6.js": "/Secret-NFT/precache-manifest.6f9cf908dbd3293be1f1c277590c5aa6.js",
+    "precache-manifest.0413f19fdfc4e66bd8c29414f703b643.js": "/Secret-NFT/precache-manifest.0413f19fdfc4e66bd8c29414f703b643.js",
     "service-worker.js": "/Secret-NFT/service-worker.js",
-    "static/css/main.294e8144.chunk.css.map": "/Secret-NFT/static/css/main.294e8144.chunk.css.map"
+    "static/css/main.71216762.chunk.css.map": "/Secret-NFT/static/css/main.71216762.chunk.css.map"
   }
 }
