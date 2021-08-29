@@ -63,6 +63,7 @@ const UploadIPFS = props => {
 
     const setValue = async value => {
         console.log('clearData :>> ', clearData);
+        setClearData(value.dataToEncrypt);
         setCustomerAddress(value.addressToEncrypt)
 
         const encData = await metamaskEncryptData(value.dataToEncrypt || clearData || textArea, newPublicKey)
@@ -187,8 +188,8 @@ const UploadIPFS = props => {
                 <div>Creator address{creatorAddress}</div>
                 {newPrivateKey && <h2>Step 2: Encrypt private key via the creator public key</h2>}
                 {newPrivateKey && <button className="btn-upload" onClick={() => encryptPrivateKeyForNFTFile()}>Encrypt private key</button>}
-                {/* <div>Encrypted private key</div>
-                <div>{encryptedPrivateKey}</div> */}
+                <div>Encrypted private key</div>
+                <div>{encryptedPrivateKey}</div>
                 <br></br>
 
                 {encryptedPrivateKey && <h2>Step 3: Encrypt data via generated public key for NFT URI and upload it to IPFS </h2>}
@@ -215,48 +216,37 @@ const UploadIPFS = props => {
                             }
                         </> :
                             <>{
-                            selectedOption === '0' && <div className="row">
-                                <div className="u-full-width">
-                                    <label htmlFor="mURI">Data for encryption</label>
-                                    <input
-                                        name="dataToEncrypt"
-                                        className="u-full-width"
-                                        placeholder="string data"
-                                        ref={register({ required: false, maxLength: 80000 })}
-                                    />
-                                    {errors.dataToEncrypt && <span>Use a valid input</span>}
+                                selectedOption === '0' && <div className="row">
+                                    <div className="u-full-width">
+                                        <label htmlFor="mURI">Data for encryption</label>
+                                        <input
+                                            name="dataToEncrypt"
+                                            className="u-full-width"
+                                            placeholder="string data"
+                                            ref={register({ required: false, maxLength: 80000 })}
+                                        />
+                                        {errors.dataToEncrypt && <span>Use a valid input</span>}
+                                    </div>
                                 </div>
-                            </div>
                             }
                                 {
-                                     selectedOption === '2' && <div className="row">
-                                    <div className="u-full-width">
-                                        <input type="file" id="upload" 
-                                            name="fileToEncrypt"
-                                            className="u-full-width"
-                                            onChange={onFileChange}
-                                            hidden />
-                                        <label className="label-upload" htmlFor="upload">Choose file</label>
-                                        {/* <label htmlFor="mURI">Upload</label>
-                                        <input
-                                            type="file"
-                                            id="file1"
-                                            name="fileToEncrypt"
-                                            className="u-full-width"
-                                            onChange={onFileChange}
-                                        /> */}
-                                        {errors.fileToEncrypt && <span>Use a valid input</span>}
-                                        {choisedFile}
-                                    </div>
-                                </div>}
+                                    selectedOption === '2' && <div className="row">
+                                        <div className="u-full-width">
+                                            <input type="file" id="upload"
+                                                name="fileToEncrypt"
+                                                className="u-full-width"
+                                                onChange={onFileChange}
+                                                hidden />
+                                            <label className="label-upload" htmlFor="upload">Choose file</label>                                           
+                                            {errors.fileToEncrypt && <span>Use a valid input</span>}
+                                            {choisedFile}
+                                        </div>
+                                    </div>}
                             </>
                         }
                         {clearData !== '' && <input className="btn-upload" type="submit" value="Push encoded data to IPFS" />}
                     </form>
                 }
-                {/*  <div>{getTxStatus()}</div> */}
-                {/* <UriBlock /> */}
-                {/* <div>{encryptedData}</div> */}
                 {fileUrl && <h2>Step 4: Encrypt data via generated public key for NFT URI </h2>}
                 {fileUrl && <SetDecrypt
                     drizzle={drizzle}
@@ -266,13 +256,7 @@ const UploadIPFS = props => {
                     typeData={selectedOption}
                 />}
             </section>
-            {/* <input
-                type="file"
-                onChange={onChange}
-            /> */}
-            <a href={fileUrl}>{fileUrl}</a>
-            {/* <button onClick={() => getInfoFromIPFS()}>Get Info from IPFS</button> */}
-            {/* <div>{textFromIpfsFIle}</div> */}
+            <a href={fileUrl} target="_blank">{fileUrl}</a>
             {fileUrl && <h2>Step 5: Encrypt data via generated public key for NFT URI </h2>}
             {fileUrl && <MintNFT
                 drizzle={drizzle}

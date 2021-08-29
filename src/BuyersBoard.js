@@ -13,7 +13,7 @@ const BuyersBoard = props => {
     const { drizzle, drizzleState, nftOwnersDetails } = props;
     const contract = drizzle.contracts.EncNft;
     const contractMarket = drizzle.contracts.MarketPlace;
-   
+
     const [showBoard, setShowBoard] = useState(false);
     const [buyerIndex, setBuyerIndex] = useState(-1);
     useEffect(() => {
@@ -25,7 +25,7 @@ const BuyersBoard = props => {
         setChosenTokenId(owner.idNft)
         const pk = await getPublicKeyViaMetamask(drizzleState.accounts[0])
         if (pk) {
-            setPubKey(pk) 
+            setPubKey(pk)
         }
     }
     const getBuyers = async () => {
@@ -91,6 +91,16 @@ const BuyersBoard = props => {
                 ''
         )
     }
+    const CountBuyers = (token) => {
+        let totalSum = 0;
+        const totalBuyersOfToken = nftBuyersDetails.filter(item => item.idToken === token.idNft)
+
+        totalBuyersOfToken.map(buyer => totalSum += +utils.formatEther(buyer.buyerBet))
+        return (
+            <div className="info">{totalBuyersOfToken.length} buyers,  Total sum bets: {totalSum} ETH </div>
+
+        )
+    }
     const BuyersOfToken = (token) => {
         // own address make color red
 
@@ -122,11 +132,11 @@ const BuyersBoard = props => {
     return (
         // if it exists, then we display its value
         <>
-            <button className="btn-bet" onClick={() => setShowBoard(!showBoard)}>{showBoard ? 'Hide Buyers Boards' : 'Show Buyers Boards'}</button>           
+            <button className="btn-bet" onClick={() => setShowBoard(!showBoard)}>{showBoard ? 'Hide Buyers Boards' : 'Show Buyers Boards'}</button>
             {showBoard && <Accordion defaultActiveKey="0" > {
                 nftOwnersDetails.map((token, index) =>
-                    <Accordion.Item   eventKey={index} key={index} >
-                        <Accordion.Header className="ah" onClick={() => setBuyerIndex(index)}> ID NFT: {token.idNft} {token.name} </Accordion.Header>
+                    <Accordion.Item eventKey={index} key={index} >
+                        <Accordion.Header className="ah" onClick={() => setBuyerIndex(index)}> ID: {token.idNft} name: {token.name} {CountBuyers(token)}</Accordion.Header>
                         <Accordion.Body className={buyerIndex === index ? "active" : "inactive"} >
                             <div > {token.description} </div> {BuyersOfToken(token)}
                         </Accordion.Body> </Accordion.Item >

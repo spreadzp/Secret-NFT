@@ -122,7 +122,11 @@ nav ul {
     color: #f10606;
     font-weight: 500;
     font: initial;
+      
 }
+button.accordion-button.collapse {
+    height: 60px !important;
+} 
 .btn-approve {
     color: #f3e8e8;
     font-weight: 500;
@@ -130,7 +134,11 @@ nav ul {
     background: radial-gradient( rgb(245, 16, 0), transparent);
     border-radius: 20px;  
 }
-
+.info {
+    color: #f3e8e8;
+    font-weight: 500;
+    font: initial;
+}
 .btn-bet {
     color: #f10606;
     font-weight: 500;
