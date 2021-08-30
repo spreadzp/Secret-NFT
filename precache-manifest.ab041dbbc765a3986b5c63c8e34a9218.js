@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "e3a6a34b259ec2f15e5a0abf0007c4d5",
+    "revision": "c6ee3f9d6d0aa4db10f170e421f3f5ca",
     "url": "/Secret-NFT/index.html"
   },
   {
-    "revision": "06cfd3fc2ae674da0288",
+    "revision": "deb22f1e9e53c5c1d8c4",
     "url": "/Secret-NFT/static/css/main.71216762.chunk.css"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/Secret-NFT/static/js/2.ec531250.chunk.js"
   },
   {
-    "revision": "06cfd3fc2ae674da0288",
-    "url": "/Secret-NFT/static/js/main.3a0f0ca2.chunk.js"
+    "revision": "deb22f1e9e53c5c1d8c4",
+    "url": "/Secret-NFT/static/js/main.2ce1866f.chunk.js"
   },
   {
     "revision": "64cc53b293e60c2fffe1",
