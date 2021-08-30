@@ -58,13 +58,13 @@ const SetDecrypt = props => {
     const showDecryptByTypeData = (type) => {
         return (
             <>
-                {type == '0' && <div name="decrypredData"
-                    className="u-full-width"><textarea rows={20} cols={80} value={decryptedInfo}   /></div>}
-                {type == '1' && <div><img name="decrypredData"
+                {[0, '0'].includes(type) && <div name="decrypredData"
+                    className="u-full-width"><textarea rows={20} cols={80} value={decryptedInfo}   />!!!!!</div>}
+                {[1, '1'].includes(type) && <div><img name="decrypredData"
                     className="u-full-width" src={decryptedInfo} />
                 </div>}
                 {
-                    type == '2' && <div name="decrypredData"
+                    [2, '2'].includes(type) && <div name="decrypredData"
                     className="u-full-width"><textarea rows={40} cols={80} value={decryptedInfo}   /></div>
                 }
             </>
@@ -75,7 +75,7 @@ const SetDecrypt = props => {
         <section>
             <div className="row">
                 <div className="six columns">
-                    <label htmlFor="decrypredData">Encrypted Data</label>
+                    <label htmlFor="decrypredData">Decrypted Data</label>
                     {showDecryptByTypeData(typeData)}
 
                 </div>

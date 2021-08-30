@@ -80,6 +80,7 @@ export async function decryptPrivateKey(encryptedMessage, account) {
 }
 
 export async function decryptUriFile(encryptedMessage, privateKey) {
+    console.log("🚀 ~ file: metamask.js ~ line 83 ~ decryptUriFile ~ encryptedMessage", encryptedMessage)
     try{
         console.log(`encryptedMessage.length: ${encryptedMessage.length}`)
         const parsedEncInfo = EthCrypto.cipher.parse(encryptedMessage)

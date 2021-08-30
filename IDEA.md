@@ -23,6 +23,19 @@ MarketPlace 0x7680956dFC896f00bedD1Dc1285e1B1c56c327EE
 fix https://i.imgur.com/gVBNu7V.png  without injected web3
 https://www.npmjs.com/package/eth-crypto   use for compress/decompress strings base64
 
+video https://www.loom.com/share/ff76e94ace4f4c0491532fce0529b8c3
+
+
+1 - 
+https://www.loom.com/share/6e7ec44d1c644771ba153952c16b6cf9
+
+
+
+https://www.loom.com/share/e44a998c01f246a3b1fcc0dcdb24ccff
+
+
+
+
 
 
 

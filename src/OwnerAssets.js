@@ -21,7 +21,7 @@ const OwnerAssets = props => {
 
     const contractMarket = drizzle.contracts.MarketPlace;
     const typeFileNames = ['#text', '#image', '#file']
-    const cutParams = [{start: 5, end: -3}, {start: 6, end: -4}, {start: 5, end: -3}]
+    const cutParams = [{start: 5, end: -3}, {start: 5, end: -3}, {start: 5, end: -3}]
     
 
     useEffect(() => {
@@ -62,7 +62,8 @@ const OwnerAssets = props => {
             const cidPath = path[path.length - 1]
             console.log("🚀 ~ file: OwnerAssets.js ~ line 60 ~ useEffect ~ cidPath", cidPath)
             const getInfoFromIPFS = async (cid) => {
-                const result = await client.object.get(cid, { timeout: 30000 })
+                const result = await client.object.get(cid, { timeout: 60000 })
+                console.log("🚀 ~ file: OwnerAssets.js ~ line 66 ~ getInfoFromIPFS ~ result", result)
                 console.log('typeData :>> ', typeData);
                 console.log('cutParams[typeData].start, cutParams[typeData].end :>> ', cutParams[typeData].start, cutParams[typeData].end);
                 const cuttedString = new TextDecoder().decode(result.Data).slice(cutParams[typeData].start, cutParams[typeData].end);
